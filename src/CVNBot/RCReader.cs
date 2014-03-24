@@ -80,7 +80,7 @@ namespace CVNBot
             }
             try
             {
-                rcirc.Login(Program.botNick2, "CVNBot", 4, "CVNBot");
+                rcirc.Login(Program.botNick2, "CVNBot", 4, "CVNBot", (string)Program.mainConfig["botpass"]);
 
                 foreach (string prj in Program.prjlist.Keys)
                 {

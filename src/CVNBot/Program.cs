@@ -24,7 +24,7 @@ namespace CVNBot
 
     class Program
     {
-        const string version = "1.20beta";
+        const string version = "1.20beta (customised for brickimedia)";
 
         public static IrcClient irc = new IrcClient();
         public static RCReader rcirc = new RCReader();
