@@ -60,6 +60,8 @@ namespace CVNBot
         /// <param name="interwiki">Interwiki link (e.g., it:s: -- can be empty string)</param>
         public void addNewProject(string projectName, string interwiki)
         {
+            string langPortion = projectName.Split(new char[1] { '.' }, 2)[0];
+            string projPortion = projectName.Split(new char[1] { '.' }, 2)[1];
             if (interwiki == "")
             {
                 //Try to guess interwiki
@@ -70,30 +72,12 @@ namespace CVNBot
                     throw new Exception((String)Program.msgs["20004"]);
                 }
 
-                string langPortion = projectName.Split(new char[1] { '.' }, 2)[0];
-                string projPortion = projectName.Split(new char[1] { '.' }, 2)[1];
+                /*string langPortion = projectName.Split(new char[1] { '.' }, 2)[0];
+                string projPortion = projectName.Split(new char[1] { '.' }, 2)[1];*/
                 switch (projPortion)
                 {
-                    case "wikipedia":
+                    case "brickimedia":
                         interwiki = langPortion + ":";
-                        break;
-                    case "wiktionary":
-                        interwiki = "wikt:" + langPortion + ":";
-                        break;
-                    case "wikibooks":
-                        interwiki = "b:" + langPortion + ":";
-                        break;
-                    case "wikinews":
-                        interwiki = "n:" + langPortion + ":";
-                        break;
-                    case "wikisource":
-                        interwiki = "s:" + langPortion + ":";
-                        break;
-                    case "wikiquote":
-                        interwiki = "q:" + langPortion + ":";
-                        break;
-                    case "wikiversity":
-                        interwiki = "v:" + langPortion + ":";
                         break;
                     default:
                         throw new Exception((String)Program.msgs["20004"]);
@@ -111,8 +95,9 @@ namespace CVNBot
             prj.retrieveWikiDetails();
             this.Add(projectName, prj);
             //Join the new channel:
-            logger.Info("Joining #" + projectName);
-            Program.rcirc.rcirc.RfcJoin("#" + projectName);
+            
+            logger.Info("Joining #" + projPortion + "-rc-" + langPortion);
+            Program.rcirc.rcirc.RfcJoin("#" + projPortion + "-rc-" + langPortion);
 
             //Dump new settings:
             dumpToFile();
@@ -163,7 +148,7 @@ namespace CVNBot
             dumpToFile();
 
             Program.SendMessageF(Meebey.SmartIrc4net.SendType.Message, currentBatchReloadChannel
-                        , "Reloaded all wikis. Phew, give the Wikimedia servers a break :(", false, false);
+                        , "Reloaded all wikis. Phew, give the brickimedia servers a break :(", false, false);
         }
     }
 }

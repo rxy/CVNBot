@@ -845,7 +845,7 @@ namespace CVNBot
                     ourdbcon.Open();
 
                     string list = CVNBotUtils.getRawDocument("http://" + projectName
-                        + ".org/w/index.php?title=Special:Listusers&group=" + getGroup + "&limit=5000&offset=0");
+                        + ".org/index.php?title=Special:Listusers&group=" + getGroup + "&limit=5000&offset=0");
 
                     //Now parse the list: 
                     /* _1568: FIX: MW error */

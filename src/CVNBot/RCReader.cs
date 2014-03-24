@@ -46,7 +46,8 @@ namespace CVNBot
         static Regex stripColours = new Regex(@"\x04\d{0,2}\*?");
         static Regex stripColours2 = new Regex(@"\x03\d{0,2}");
         static Regex stripBold = new Regex(@"\x02");
-        static Regex fullString = new Regex(@"^\x03" + @"14\[\[\x03" + @"07(?<title>.+?)\x03" + @"14\]\]\x03" + @"4 (?<flag>.*?)\x03" + @"10 \x03" + @"02(?<url>.*)\x03 \x03" + @"5\*\x03 \x03" + @"03(?<user>.*?)\x03 \x03" + @"5\*\x03 (?<szdiff>.*?) \x03" + @"10(?<comment>.*)\x03$");
+        static Regex rmDataLinkEscape  = new Regex(@"\x10"+"n");
+        static Regex fullString = new Regex(@"^\x03" + @"14\[\[\x03" + @"07(?<title>.+?)\x03" + @"14\]\]\x03" + @"4 (?<flag>.*?)\x03" + @"10 \x03" + @"02(?<url>.*)\x03 \x03" + @"5\*\x03 \x03" + @"03(?<user>.*?)\x03 \x03" + @"5\*\x03 (?<szdiff>.*?) \x03" + @"10(?<comment>.*)\x03(?:\x10n|)$");
         static Regex rszDiff = new Regex(@"\(([\+\-])([0-9]+)\)");
         static Regex rflagMN = new Regex(@"[MN]{0,2}");
 
@@ -70,7 +71,7 @@ namespace CVNBot
 
             try
             {
-                rcirc.Connect("irc.wikimedia.org", 6667);
+                rcirc.Connect("irc.freenode.org", 6667);
             }
             catch (ConnectionException e)
             {
@@ -79,12 +80,14 @@ namespace CVNBot
             }
             try
             {
-                rcirc.Login(Program.botNick, "CVNBot", 4, "CVNBot");
+                rcirc.Login(Program.botNick2, "CVNBot", 4, "CVNBot");
 
                 foreach (string prj in Program.prjlist.Keys)
                 {
-                    //logger.Info("Joining #" + prj);
-                    rcirc.RfcJoin("#" + prj);
+                    string RClangPortion = prj.Split(new char[1] { '.' }, 2)[0];
+                    string RCprojPortion = prj.Split(new char[1] { '.' }, 2)[1];
+                    logger.Info("Joining #" + RCprojPortion + "-rc-" + RClangPortion);
+                    rcirc.RfcJoin("#" + RCprojPortion + "-rc-" + RClangPortion);
                 }
 
                 //Enter loop
@@ -140,7 +143,7 @@ namespace CVNBot
             lastMessage = DateTime.Now;
 
             //Same as RCParser.py->parseRCmsg()
-            string strippedmsg = stripBold.Replace(stripColours.Replace(CVNBotUtils.replaceStrMax(e.Data.Message, '\x03', '\x04', 14), "\x03"), "");
+            string strippedmsg = rmDataLinkEscape.Replace(stripBold.Replace(stripColours.Replace(CVNBotUtils.replaceStrMax(e.Data.Message, '\x03', '\x04', 14), "\x03"), ""), "");
             string[] fields = strippedmsg.Split(new char[1] { '\x03' }, 15);
             if (fields.Length == 15)
             {
@@ -160,7 +163,9 @@ namespace CVNBot
                 rce.eventtype = RCEvent.EventType.unknown;
                 rce.blockLength = "";
                 rce.movedTo = "";
-                rce.project = e.Data.Channel.Substring(1);
+                //rce.project = e.Data.Channel.Substring(1);
+                string chname = e.Data.Channel.Substring(1);
+                rce.project = chname.Split(new string[] { "-rc-" }, 2, StringSplitOptions.None)[1]+'.'+chname.Split(new string[] { "-rc-" }, 2, StringSplitOptions.None)[0];
                 rce.title = Project.translateNamespace(rce.project, fields[2]);
                 rce.url = fields[6];
                 rce.user = fields[10];

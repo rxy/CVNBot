@@ -176,7 +176,7 @@ namespace CVNBot
         {
             if (!snamespacesAlreadySet)
             {
-                snamespaces = CVNBotUtils.getRawDocument(rooturl + "w/api.php?action=query&meta=siteinfo&siprop=namespaces&format=xml");
+                snamespaces = CVNBotUtils.getRawDocument(rooturl + "api.php?action=query&meta=siteinfo&siprop=namespaces&format=xml");
                 if (snamespaces == "")
                     throw new Exception("Can't load list of namespaces from " + rooturl);
             }
@@ -240,7 +240,7 @@ namespace CVNBot
         void generateRegex(string mwMessageTitle, int reqCount, ref string destRegex, bool nonStrict)
         {
             //Get raw wikitext
-            string mwMessage = CVNBotUtils.getRawDocument(rooturl + "w/index.php?title=" + mwMessageTitle + "&action=raw&usemsgcache=yes");
+            string mwMessage = CVNBotUtils.getRawDocument(rooturl + "index.php?title=" + mwMessageTitle + "&action=raw&usemsgcache=yes");
 
             //Now gently coax that into a regex
             foreach (char c in rechars)
