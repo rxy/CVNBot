@@ -629,11 +629,11 @@ namespace CVNBot
                         break;
                     case "status":
                         TimeSpan ago = DateTime.Now.Subtract(rcirc.lastMessage);
-                        SendMessageF(SendType.Message, e.Data.Channel, "Last message was received on RCReader "
+                        SendMessageF(SendType.Notice, e.Data.Channel, "Last message was received on RCReader "
                             + ago.TotalSeconds + " seconds ago", false, false);
                         break;
                     case "help":
-                        SendMessageF(SendType.Message, e.Data.Channel, (String)msgs["20005"], false, true);
+                        SendMessageF(SendType.Notice, e.Data.Channel, (String)msgs["20005"], false, true);
                         break;
                     case "version":
                     case "settings":
@@ -649,7 +649,7 @@ namespace CVNBot
                         if (!hasPrivileges('@', ref e))
                             return;
                         readMessages((string)mainConfig["messages"]);
-                        SendMessageF(SendType.Message, e.Data.Channel, "Re-read messages", false, false);
+                        SendMessageF(SendType.Notice, e.Data.Channel, "Re-read messages", false, false);
                         break;
                     case "reload":
                         //Reloads wiki data for a project
@@ -661,11 +661,11 @@ namespace CVNBot
                                 throw new Exception("Project " + cmdParams[0] + " is not loaded");
 
                             ((Project)prjlist[cmdParams[0]]).retrieveWikiDetails();
-                            SendMessageF(SendType.Message, e.Data.Channel, "Reloaded project " + cmdParams[0], false, false);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Reloaded project " + cmdParams[0], false, false);
                         }
                         catch (Exception ex)
                         {
-                            SendMessageF(SendType.Message, e.Data.Channel, "Unable to reload: " + ex.Message, false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Unable to reload: " + ex.Message, false, true);
                             logger.Error("Reload project failed: " + ex.Message);
                         }
                         break;
@@ -679,16 +679,16 @@ namespace CVNBot
                             else
                                 prjlist.addNewProject(cmdParams[0], "");
 
-                            SendMessageF(SendType.Message, e.Data.Channel, "Loaded new project " + cmdParams[0], false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Loaded new project " + cmdParams[0], false, true);
                             //Automatically get admins and bots:
                             Thread.Sleep(200);
-                            SendMessageF(SendType.Message, e.Data.Channel, listman.configGetAdmins(cmdParams[0]), false, false);
+                            SendMessageF(SendType.Notice, e.Data.Channel, listman.configGetAdmins(cmdParams[0]), false, false);
                             Thread.Sleep(500);
-                            SendMessageF(SendType.Message, e.Data.Channel, listman.configGetBots(cmdParams[0]), false, false);
+                            SendMessageF(SendType.Notice, e.Data.Channel, listman.configGetBots(cmdParams[0]), false, false);
                         }
                         catch (Exception ex)
                         {
-                            SendMessageF(SendType.Message, e.Data.Channel, "Unable to add project: " + ex.Message, false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Unable to add project: " + ex.Message, false, true);
                             logger.Error("Add project failed: " + ex.Message);
                         }
                         break;
@@ -706,12 +706,12 @@ namespace CVNBot
                                 else
                                 {
                                     Broadcast("BLEEP", "FIND", cmdParams[0], 0, e.Data.Channel, e.Data.Nick);
-                                    SendMessageF(SendType.Message, e.Data.Channel, "Bleeped. Please wait for a reply.", false, true);
+                                    SendMessageF(SendType.Notice, e.Data.Channel, "Bleeped. Please wait for a reply.", false, true);
                                 }
                             }
                         } catch (Exception ex)
                         {
-                            SendMessageF(SendType.Message, e.Data.Channel, "Unable to bleep: " + ex.Message, false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Unable to bleep: " + ex.Message, false, true);
                         }
                         break;
                     case "count":
@@ -727,11 +727,11 @@ namespace CVNBot
                         try
                         {
                             prjlist.deleteProject(cmdParams[0]);
-                            SendMessageF(SendType.Message, e.Data.Channel, "Deleted project " + cmdParams[0], false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Deleted project " + cmdParams[0], false, true);
                         }
                         catch (Exception ex)
                         {
-                            SendMessageF(SendType.Message, e.Data.Channel, "Unable to delete project: " + ex.Message, false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, "Unable to delete project: " + ex.Message, false, true);
                             logger.Error("Delete project failed: " + ex.Message);
                         }
                         break;
@@ -742,7 +742,7 @@ namespace CVNBot
                             result += p + " ";
                         }
                         result += "(Total: " + prjlist.Count.ToString() + " wikis)";
-                        SendMessageFMulti(SendType.Message, e.Data.Channel, result, false, true);
+                        SendMessageFMulti(SendType.Notice, e.Data.Channel, result, false, true);
                         break;
                     case "batchgetusers":
                         if (!hasPrivileges('@', ref e))
@@ -751,40 +751,40 @@ namespace CVNBot
                         new Thread(new ThreadStart(listman.BatchGetAllAdminsAndBots)).Start();
                         break;
                     case "bl":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(1, e.Data.Nick, extraParams), false, true);
                         break;
                     case "wl":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(0, e.Data.Nick, extraParams), false, true);
                         break;
                     case "gl":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(6, e.Data.Nick, extraParams), false, true);
                         break;
                     case "al":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(2, e.Data.Nick, extraParams), false, true);
                         break;
                     case "bots":
                     case "bot":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(5, e.Data.Nick, extraParams), false, true);
                         break;
                     case "cvp":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(10, e.Data.Nick, extraParams), false, true);
                         break;
                     case "bnu":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(11, e.Data.Nick, extraParams), false, true);
                         break;
                     case "bna":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(12, e.Data.Nick, extraParams), false, true);
                         break;
                     case "bes":
-                        SendMessageF(SendType.Message, e.Data.Channel,
+                        SendMessageF(SendType.Notice, e.Data.Channel,
                             listman.handleListCommand(20, e.Data.Nick, extraParams), false, true);
                         break;
 
@@ -792,22 +792,22 @@ namespace CVNBot
                     case "getadmins":
                         if (!hasPrivileges('@', ref e))
                             return;
-                            SendMessageF(SendType.Message, e.Data.Channel, listman.configGetAdmins(extraParams), false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, listman.configGetAdmins(extraParams), false, true);
                             break;
                      case "getbots":
                         if (!hasPrivileges('@', ref e))
                             return;
-                            SendMessageF(SendType.Message, e.Data.Channel, listman.configGetBots(extraParams), false, true);
+                            SendMessageF(SendType.Notice, e.Data.Channel, listman.configGetBots(extraParams), false, true);
                             break;
 
                     case "intel":
                         string intelResult = listman.GlobalIntel(extraParams);
-                        SendMessageFMulti(SendType.Message, e.Data.Channel, intelResult, false, true);
+                        SendMessageFMulti(SendType.Notice, e.Data.Channel, intelResult, false, true);
                         break;
                     case "purge":
                         if (!hasPrivileges('@', ref e))
                             return;
-                        SendMessageF(SendType.Message, e.Data.Channel, listman.purgeWikiData(extraParams), false, true);
+                        SendMessageF(SendType.Notice, e.Data.Channel, listman.purgeWikiData(extraParams), false, true);
                         break;
                     case "batchreload":
                         if (!hasPrivileges('@', ref e))
@@ -1383,7 +1383,7 @@ namespace CVNBot
                 message = "";
             }
 
-            SendMessageFMulti(SendType.Message, FeedChannel, message, true, false);
+            SendMessageFMulti(SendType.Notice, FeedChannel, message, true, false);
 
         }
 

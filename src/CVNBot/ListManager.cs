@@ -914,10 +914,10 @@ namespace CVNBot
                     return; //Shouldn't happen, but here anyway
 
                 if (currentGetThreadMode != "")
-                    Program.SendMessageF(Meebey.SmartIrc4net.SendType.Message, currentGetBatchChannel
+                    Program.SendMessageF(Meebey.SmartIrc4net.SendType.Notice, currentGetBatchChannel
                         , "The userlist fetcher is currently off on another errand", false, true);
 
-                Program.SendMessageF(Meebey.SmartIrc4net.SendType.Message, currentGetBatchChannel
+                Program.SendMessageF(Meebey.SmartIrc4net.SendType.Notice, currentGetBatchChannel
                         , "Request to get admins and bots for all " + Program.prjlist.Count.ToString() + " wikis accepted.",
                         false, true);
 
@@ -944,7 +944,7 @@ namespace CVNBot
                     Thread.Sleep(800);
                 }
 
-                Program.SendMessageF(Meebey.SmartIrc4net.SendType.Message, currentGetBatchChannel
+                Program.SendMessageF(Meebey.SmartIrc4net.SendType.Notice, currentGetBatchChannel
                         , "Done fetching all admins and bots. Phew, I'm tired :P", false, false);
             }
             finally
